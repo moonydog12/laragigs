@@ -1,0 +1,16 @@
+{
+  "plugins": ["@prettier/plugin-php","prettier-plugin-blade"],
+  "parser": "php",
+  "tabWidth": 2,
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": [
+          "*.blade.php"
+      ],
+      "options": {
+          "parser": "blade"
+      }
+    }
+  ]
+}

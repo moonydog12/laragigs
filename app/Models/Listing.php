@@ -8,4 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class Listing extends Model
 {
   use HasFactory;
+
+  public function scopeFilter($query, array $filters)
+  {
+    if ($filters['tag'] ?? false) {
+      $tag = '%' . request('tag') . '%';
+      $query->where('tags', 'like', $tag);
+    }
+
+    if ($filters['search'] ?? false) {
+      $searchTerm = '%' . request('search') . '%';
+
+      $query->where(function ($query) use ($searchTerm) {
+        $query
+          ->where('title', 'like', $searchTerm)
+          ->orWhere('description', 'like', $searchTerm)
+          ->orWhere('tags', 'like', $searchTerm);
+      });
+    }
+  }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Listing;
+use Illuminate\Validation\Rule;
 
 class ListingController extends Controller
 {
@@ -24,5 +25,30 @@ class ListingController extends Controller
     return view('listings.show', [
       'listing' => $listing,
     ]);
+  }
+
+  // Show create form
+  public function create()
+  {
+    return view('listings.create');
+  }
+
+  // Store listing data
+  public function store(Request $request)
+  {
+    // 表單驗證(laravel特殊用法?)
+    $formFields = $request->validate([
+      'title' => 'required',
+      'company' => ['required', Rule::unique('listings', 'company')],
+      'location' => 'required',
+      'website' => 'required',
+      'email' => ['required', 'email'],
+      'tags' => 'required',
+      'description' => 'required',
+    ]);
+
+    Listing::create($formFields);
+
+    return redirect('/');
   }
 }
